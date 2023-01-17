@@ -1,0 +1,61 @@
+﻿@model IEnumerable<VehicleRentSystem.Models.CategoryModel>
+
+@{
+    ViewData["Title"] = "Category list";
+}
+<header>
+    <div class="navbar navbar-light bg-light shadow-sm">
+        <a asp-action="AddCategory" asp-controller="VehicleManagement" class="btn btn-outline-dark flex-shrink-0">Add new category</a>
+        <a asp-action="VehicleManagementList" asp-controller="VehicleManagement" class="btn btn-outline-dark flex-shrink-0">Back</a>
+    </div>
+</header>
+
+<body>
+    @{
+        if (TempData["ExistingVehicles"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error! </strong>@TempData["ExistingVehicles"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+        }
+    }
+    <div>
+        @foreach (var item in Model)
+        {
+            <div class="mt-5">
+                <div class="d-style btn btn-brc-tp border-2 bgc-white btn-outline-purple btn-h-outline-purple btn-a-outline-purple w-100 my-2 py-3 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-4">
+                            <h4 class="pt-3 text-170 text-600 text-purple-d1 letter-spacing">
+                                @item.Name
+                            </h4>
+
+                            <div class="text-secondary-d1 text-120">
+                                <span class="ml-n15 align-text-bottom">ID: @item.Id</span>
+                            </div>
+                        </div>
+
+                        <ul class="list-unstyled mb-0 col-12 col-md-4 text-dark-l1 text-90 text-left my-4 my-md-0">
+                            <li>
+                                <i class="fa fa-check text-success-m2 text-110 mr-2 mt-1"></i>
+                                <span>
+                                    <span class="text-110">Color</span>
+                                    <div style="height: 6px; width: 160px; background-color: @item.Color"></div>
+                                </span>
+                        </ul>
+
+                        <div class="col-12 col-md-4 text-center">
+                            <a asp-action="EditCategory" asp-route-id="@item.Id" class="btn btn-outline-dark flex-shrink-0">Edit</a>
+                            <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="@("#DeleteCategory-"+item.Id)" data-url="@Url.Action($"DeleteCategory/{item.Id}")">Delete</button>
+                            @await Html.PartialAsync("_DeleteCategoryModalPartial", item)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</body>

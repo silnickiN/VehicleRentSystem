@@ -1,0 +1,28 @@
+﻿@model VehicleModel
+
+<div class="modal fade" id="DeleteMainImage-@Model.Id" aria-labelledby="DeleteMainImage" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete main image</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form asp-action="DeleteMainImage" asp-route-id="@Model.Id" method="post">
+                    <div class="form-group">
+                        Are you sure you want to delete main image?
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-dark" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-outline-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,111 @@
+﻿@model VehicleRentSystem.Models.RentalModel
+
+@{
+    ViewData["Title"] = "New rental";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById("startDateInput").valueAsDate = new Date();
+            document.getElementById("endDateInput").valueAsDate = new Date(Date.now() + (3600 * 1000 * 24))
+        });
+    </script>
+
+</head>
+
+<main class="mt-5">
+    <body>
+        @{
+            if (ViewBag.IsSuccess == true)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>Congratulations</strong> You have added new rental successfully. <br />
+                    Click <a asp-controller="VehicleRental" asp-action="GetUserRentals">here</a> to display your rentals.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            if (TempData["VehicleUnavailable"] != null)
+            {
+                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                    <strong>Error! </strong>@TempData["VehicleUnavailable"]
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            if (TempData["InvalidId"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error! </strong>@TempData["InvalidId"]
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+            }
+
+            if (TempData["IncorrectDate"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error! </strong>@TempData["IncorrectDate"]
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+            
+        }
+
+        <div class="section">
+            <div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div>
+                            <h1>Make your rental</h1>
+                            <p>
+                                Please pick date interval of your rental.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="booking-form">
+                            <form method="post" enctype="multipart/form-data" asp-action="Rent" asp-controller="VehicleRental">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label asp-for="StartDate" class="control-label"></label>
+                                            <input asp-for="StartDate" type="Date" min="@DateTime.Now.ToString("yyyy-MM-dd")" max="@DateTime.Now.AddDays(30).ToString("yyyy-MM-dd")" class="form-control" id="startDateInput" />
+                                            <span asp-validation-for="StartDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label asp-for="EndDate" class="control-label"></label>
+                                            <input asp-for="EndDate" type="Date" min="@DateTime.Now.AddDays(1).ToString("yyyy-MM-dd")" max="@DateTime.Now.AddDays(31).ToString("yyyy-MM-dd")" class="form-control" id="endDateInput" />
+                                            <span asp-validation-for="EndDate" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-outline-dark flex-shrink-0" value="Rent" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </body>
+</main>
+</html>

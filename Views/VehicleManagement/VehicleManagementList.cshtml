@@ -1,0 +1,153 @@
+﻿@model IEnumerable<VehicleRentSystem.Models.VehicleModel>
+
+@{
+    ViewData["Title"] = "List of vehicles";
+}
+
+@{
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+<header>
+    <div class="navbar navbar-light bg-light shadow-sm">
+        <a asp-action="AddVehicle" asp-controller="VehicleManagement" class="btn btn-outline-dark flex-shrink-0">Add new vehicle</a>
+        <a asp-action="CategoryList" asp-controller="VehicleManagement" class="btn btn-outline-dark flex-shrink-0">Categories</a>
+    </div>
+</header>
+
+<body>
+    <div>
+        <main role="main">
+            <div class="d-style btn btn-brc-tp border-2 bgc-white btn-outline-purple btn-h-outline-purple btn-a-outline-purple w-100 my-2 py-3 shadow-sm">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <span class="align-middle">
+                            Sort by:
+                            <a asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["PriceOrder"]" asp-route-currentSort="@ViewData["PriceOrder"]" asp-route-searchString="@ViewData["CurrentFilter"]">Price</a>,
+                            <a asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["ManufacturerOrder"]" asp-route-currentSort="@ViewData["ManufacturerOrder"]" asp-route-searchString="@ViewData["CurrentFilter"]">Manufacturer</a>,
+                            <a asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["YearOrder"]" asp-route-currentSort="@ViewData["YearOrder"]" asp-route-searchString="@ViewData["CurrentFilter"]">Year of production</a>
+                        </span>
+
+                    </div>
+
+                    <div class="col-md-6">
+                        <form asp-action="VehicleManagementList" method="get">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="SearchString" placeholder="Find by properties:" aria-describedby="basic-addon2" value="@ViewData["CurrentFilter"]" />
+                                <div class="input-group-append">
+                                    <input type="submit" class="btn btn-outline-secondary" value="Search">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                        <a asp-action="VehicleManagementList">
+                            <span class="align-middle">Back to default list</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            @{
+                if (TempData["ExistingRentals"] != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>Error! </strong>@TempData["ExistingRentals"]
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                }
+
+            }
+            @foreach (var item in Model)
+            {
+                <div class="mt-5">
+                    <div class="d-style btn btn-brc-tp border-2 bgc-white btn-outline-purple btn-h-outline-purple btn-a-outline-purple w-100 my-2 py-3 shadow-sm">
+                        <div class="row align-items-center">
+                            <div class="col-12 col-md-4">
+
+                                <img src="@item.MainImageUrl" class="img-thumbnail" />
+                                <div class="text-secondary-d1 text-120">
+                                </div>
+                            </div>
+
+                            <ul class="list-unstyled mb-0 col-12 col-md-4 text-dark-l1 text-90 text-left my-4 my-md-0">
+                                <li>
+                                    <i class="fa fa-check text-success-m2 text-110 mr-2 mt-1"></i>
+                                    <span>
+                                        <span class="text-110">
+                                            ID: @item.Id
+                                        </span>
+                                    </span>
+                                </li>
+
+                                <li class="mt-25">
+                                    <h4 class="pt-3 text-170 text-600 text-purple-d1 letter-spacing">
+
+                                        @item.Manufacturer @item.Model
+                                    </h4>
+                                    <span class="ml-n15 align-text-bottom">
+                                        @item.ProductionYear
+                                    </span>
+                                </li>
+
+
+                            </ul>
+
+                            <div class="col-12 col-md-4 text-center">
+                                <a asp-action="EditVehicle" asp-route-id="@item.Id" asp-controller="VehicleManagement" class="btn btn-outline-dark flex-shrink-0">Edit</a>
+                                <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="@("#DeleteVehicle-"+item.Id)" data-url="@Url.Action($"DeleteVehicle/{item.Id}")">Delete</button>
+                                @await Html.PartialAsync("_DeleteVehicleModalPartial", item)
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+
+            @if (pager.TotalPages > 0)
+            {
+                <ul class="pagination justify-content-end">
+
+                    @if (pager.CurrentPage > 1)
+                    {
+                        <li class="page-item">
+                            <a class="btn btn-outline-dark" asp-controller="VehicleManagement" asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pg="1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="btn btn-outline-dark" asp-controller="VehicleManagement" asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pg="@(pager.CurrentPage-1)">Previous</a>
+                        </li>
+                    }
+
+                    @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                    {
+                        <li class="page-item">
+                            <a class="btn @(pge == pager.CurrentPage ? "btn-dark" : "btn-outline-dark")" asp-controller="VehicleManagement" asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pg="@pge"> @pge</a>
+                        </li>
+                    }
+
+                    @if (pager.CurrentPage < pager.TotalPages)
+                    {
+                        <li class="page-item">
+                            <a class="btn btn-outline-dark" asp-controller="VehicleManagement" asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pg="@(pager.CurrentPage+1)">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="btn btn-outline-dark" asp-controller="VehicleManagement" asp-action="VehicleManagementList" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-pg="@(pager.TotalPages)">Last</a>
+                        </li>
+                    }
+
+                </ul>
+            }
+        </main>
+    </div>
+</body>

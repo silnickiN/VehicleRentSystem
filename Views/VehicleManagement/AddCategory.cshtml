@@ -1,0 +1,51 @@
+﻿@model VehicleRentSystem.Models.CategoryModel
+
+@{
+    ViewData["Title"] = "Add new category";
+}
+
+<header>
+    <div class="navbar navbar-light bg-light shadow-sm">
+        <a asp-action="CategoryList" asp-controller="VehicleManagement" class="btn btn-outline-dark flex-shrink-0">Back</a>
+    </div>
+</header>
+
+<div>
+    <main class="w-100 p-3">
+        @if (ViewBag.IsSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Congratulations</strong> You have added new category successfully. <br />
+                Click <a asp-controller="VehicleManagement" asp-action="CategoryList">here</a> to view the details
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        <form method="post" class="row g-3" enctype="multipart/form-data" asp-action="AddCategory" asp-controller="VehicleManagement">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label asp-for="Color" class="control-label"></label>
+                    <input asp-for="Color" type="color" class="form-control" />
+                    <span asp-validation-for="Color" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Add category" class="btn btn-outline-dark flex-shrink-0" />
+            </div>
+
+        </form>
+    </main>
+</div>

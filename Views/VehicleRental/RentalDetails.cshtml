@@ -1,0 +1,56 @@
+﻿@model VehicleRentSystem.Models.RentalModel
+
+@{
+    ViewData["Title"] = "Rental details";
+
+    if (ViewData["Archived"] == null)
+    {
+        ViewData["Archived"] = "False";
+    }
+
+}
+
+<header>
+    <div class="navbar navbar-light bg-light shadow-sm">
+        <a asp-action="RentalList" asp-route-archived="@ViewData["Archived"]" asp-controller="VehicleRental" asp-route-archived="@ViewData["Archived"]" class="btn btn-outline-dark flex-shrink-0">List</a>
+        <a asp-action="Calendar" asp-controller="VehicleRental" class="btn btn-outline-dark flex-shrink-0">Calendar</a>
+    </div>
+</header>
+
+<div>
+    <div class="row">
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6">
+                        <div class="fs-5 mb-5">
+                            <span>ID: @Model.Id<span>
+                        </div>
+                        <div class="small mb-1">User ID: @Model.UserId</div>
+                        <h1 class="display-5 fw-bolder">@Model.Vehicle</h1>
+
+                        <ul class="list-group">
+                            <li class="list-group-item"><span class="font-weight-bold">First name - </span> @Model.FirstName</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Last name - </span> @Model.LastName</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Start Date - </span> @Model.StartDate.ToShortDateString()</li>
+                            <li class="list-group-item"><span class="font-weight-bold">End Date - </span> @Model.EndDate.ToShortDateString()</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Entry Date - </span> @Model.EntryDate</li>
+                            <li class="list-group-item">
+                                <span class="font-weight-bold">Phone number - </span> @{
+                                    if (Model.PhoneNumber == null)
+                                    {
+                                        <span>-</span>
+                                                        }
+                                    else
+                                    {
+                                        @Model.PhoneNumber
+                                    }
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

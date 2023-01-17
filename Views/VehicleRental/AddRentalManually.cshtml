@@ -1,0 +1,110 @@
+﻿@model VehicleRentSystem.Models.RentalModel
+@inject VehicleRentSystem.Services.Interfaces.IVehicleManagementService _vehicleManagementService
+
+@{
+    ViewData["Title"] = "Add rental";
+}
+
+<header>
+    <div class="navbar navbar-light bg-light shadow-sm">
+        <a asp-action="RentalList" asp-controller="VehicleRental" asp-route-archived="@ViewData["Archived"]" class="btn btn-outline-dark flex-shrink-0">Back</a>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', (event) => {
+            document.getElementById("startDate").valueAsDate = new Date();
+            document.getElementById("endDate").valueAsDate = new Date(Date.now() + (3600 * 1000 * 24))
+        });
+    </script>
+</header>
+
+
+<div>
+    @{
+        if (ViewBag.IsSuccess == true)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                Rental added successfully.<br />
+                Click <a asp-controller="VehicleRental" asp-route-archived="@ViewData["Archived"]" asp-action="RentalList">here</a> to display rental list.
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        if (TempData["VehicleUnavailable"] != null)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Error! </strong>@TempData["VehicleUnavailable"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+        if (TempData["IncorrectDate"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Error! </strong>@TempData["IncorrectDate"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+
+    }
+
+    <main class="w-100 p-3">
+
+        <form method="post" enctype="multipart/form-data" asp-action="AddRentalManually" asp-controller="VehicleRental">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="VehicleId" class="control-label"></label>
+                    <select asp-for="VehicleId" class="form-control" asp-items="(await _vehicleManagementService.GetAllVehicles()).Select(x=> new SelectListItem() { Text = x.ProductionYear.ToString() + ' ' + x.Manufacturer + ' ' + x.Model, Value = x.Id.ToString()})">
+                    </select>
+                    <span asp-validation-for="VehicleId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="StartDate" class="control-label"></label>
+                    <input asp-for="StartDate" type="date" class="form-control" id="startDate"/>
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="EndDate" class="control-label"></label>
+                    <input asp-for="EndDate" type="date" class="form-control" id="endDate"/>
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="FirstName" class="control-label"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="LastName" class="control-label"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Add rental" class="btn btn-outline-dark flex-shrink-0" />
+            </div>
+
+        </form>
+    </main>
+</div>

@@ -1,0 +1,205 @@
+﻿@using VehicleRentSystem.Enums
+@inject VehicleRentSystem.Services.Interfaces.ICategoryService _categoryService
+
+@model VehicleRentSystem.Models.VehicleModel
+
+@{
+    ViewData["Title"] = "Add new vehicle";
+    ;
+}
+
+<script>
+    $(document).ready(function () {
+        $('#image').change(function () {
+            $("#gallery").html('');
+            for (var i = 0; i < $(this)[0].files.length; i++) {
+                $("#gallery").append('<img class="d-block w-100" src="' + window.URL.createObjectURL(this.files[i]) + '"/>');
+            }
+        });
+    });
+</script>
+
+<header>
+    <div class="navbar navbar-light bg-light shadow-sm">
+        <a asp-action="VehicleManagementList" asp-controller="VehicleManagement" class="btn btn-outline-dark flex-shrink-0">Back</a>
+    </div>
+</header>
+
+<div>
+    @{
+
+    }
+
+    <main class="w-100 p-3">
+        @{
+            if (TempData["NoCategories"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error! </strong>@TempData["NoCategories"] <br/>
+                    Click <a asp-controller="VehicleManagement" asp-action="AddCategory">here</a> to create new category.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+
+            if (ViewBag.IsSuccess == true)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    Vehicle created successfully.<br />
+                    Click <a asp-controller="VehicleManagement" asp-action="VehicleManagementList">here</a> to display list of vehicles.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+        }
+
+        <form method="post" class="row g-3" enctype="multipart/form-data" asp-action="AddVehicle" asp-controller="VehicleManagement" runat="server">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="(await _categoryService.CategoryList()).Select(x=> new SelectListItem() { Text = x.Name, Value = x.Id.ToString()})">
+                    </select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Manufacturer" class="control-label"></label>
+                    <input asp-for="Manufacturer" class="form-control" />
+                    <span asp-validation-for="Manufacturer" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Model" class="control-label"></label>
+                    <input asp-for="Model" class="form-control" />
+                    <span asp-validation-for="Model" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="ProductionYear" class="control-label"></label>
+                    <input asp-for="ProductionYear" class="form-control" />
+                    <span asp-validation-for="ProductionYear" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Color" class="control-label"></label>
+                    <input asp-for="Color" class="form-control" />
+                    <span asp-validation-for="Color" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label asp-for="RentalPrice" class="control-label"></label>
+                    <input asp-for="RentalPrice" class="form-control" />
+                    <span asp-validation-for="RentalPrice" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Engine" class="control-label"></label>
+                    <input asp-for="Engine" class="form-control" />
+                    <span asp-validation-for="Engine" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="FuelEnum" class="control-label"></label>
+                    <select asp-for="FuelEnum" class="form-control" asp-items="Html.GetEnumSelectList<FuelEnum>()">
+                    </select>
+                    <span asp-validation-for="FuelEnum" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="BodyEnum" class="control-label"></label>
+                    <select asp-for="BodyEnum" class="form-control" asp-items="Html.GetEnumSelectList<BodyEnum>()">
+                    </select>
+                    <span asp-validation-for="BodyEnum" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="TransmissionEnum" class="control-label"></label>
+                    <select asp-for="TransmissionEnum" class="form-control" asp-items="Html.GetEnumSelectList<TransmissionEnum>()">
+                    </select>
+                    <span asp-validation-for="TransmissionEnum" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="DrivenAxleEnum" class="control-label"></label>
+                    <select asp-for="DrivenAxleEnum" class="form-control" asp-items="Html.GetEnumSelectList<DrivenAxleEnum>()">
+                    </select>
+                    <span asp-validation-for="DrivenAxleEnum" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label asp-for="Payload" class="control-label"></label>
+                    <input asp-for="Payload" class="form-control" value="-" />
+                    <span asp-validation-for="Payload" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="MainImage" class="form-label"></label>
+                    <input asp-for="MainImage" class="form-control" id="customFile" onchange="document.getElementById('MainImage').src = window.URL.createObjectURL(this.files[0])" />
+                    <span asp-validation-for="MainImage" class="text-danger"></span>
+
+                </div>
+
+
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="GalleryFiles" class="form-label"></label>
+                    <input asp-for="GalleryFiles" type="file" class="form-control" id="image" multiple />
+                    <span asp-validation-for="GalleryFiles" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <img id="MainImage" class="d-block w-100" />
+            </div>
+
+            <div class="col-md-6">
+                <div id="gallery"></div>
+            </div>
+
+
+            <div class="form-group">
+                <input type="submit" value="Add vehicle" class="btn btn-outline-dark flex-shrink-0" />
+            </div>
+
+        </form>
+    </main>
+</div>

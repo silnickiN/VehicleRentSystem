@@ -1,0 +1,75 @@
+﻿@model VehicleRentSystem.Models.VehicleModel
+
+@{
+    ViewData["Title"] = "Vehicle details";
+}
+
+<div>
+    <div class="row">
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="row gx-4 gx-lg-5 align-items-center">
+                    <div class="col-md-6">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                            <ol class="carousel-indicators">
+
+                                @for (int i = 0; i < Model.Gallery.Count(); i++)
+                                {
+                                    <li data-target="#carouselExampleIndicators" data-slide-to="@i" class="@(i==0 ? "active" : "") "></li>
+                                }
+                            </ol>
+                            <div class="carousel-inner">
+                                @for (int i = 0; i < Model.Gallery.Count(); i++)
+                                {
+                                    <div class="@(i==0 ? "carousel-item active" : "carousel-item") ">
+                                        <img class="d-block w-100" src="@Model.Gallery[i].URL" alt="@Model.Gallery[i].Name">
+                                    </div>
+                                }
+
+                            </div>
+                            <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="small mb-1">ID: @Model.Id</div>
+                        <h1 class="display-5 fw-bolder">@Model.Manufacturer @Model.Model</h1>
+                        <div class="fs-5 mb-5">
+                            <span>@Model.RentalPrice$/day</span>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item"><span class="font-weight-bold">Category - </span> @Model.Category</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Driven Axle - </span> @Model.DrivenAxle</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Production year - </span> @Model.ProductionYear</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Fuel - </span> @Model.Fuel</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Color - </span> @Model.Color</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Transmission - </span> @Model.Transmission</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Body - </span> @Model.Body</li>
+                            <li class="list-group-item"><span class="font-weight-bold">Engine - </span> @Model.Engine</li>
+                        </ul>
+                        <p class="lead">@Model.Description</p>
+                        <div class="d-flex">
+                            <a asp-action="Rent" asp-route-id="@Model.Id" asp-controller="VehicleRental" class="btn btn-outline-dark flex-shrink-0">Rent</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+    </div>
+</div>
+
+@*
+    a asp-controller="VehicleManagement" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a asp-action="List">Back to List</a>*@

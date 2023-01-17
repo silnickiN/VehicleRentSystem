@@ -1,0 +1,110 @@
+﻿@model IEnumerable<VehicleRentSystem.Models.RentalModel>
+
+@{
+    Pager pager = new Pager();
+
+    int pageNo = 0;
+
+    if (ViewBag.Pager != null)
+    {
+        pager = ViewBag.Pager;
+        pageNo = pager.CurrentPage;
+    }
+}
+
+@{
+    ViewData["Title"] = "Rental list";
+}
+
+<body>
+
+
+    <div>
+
+        @foreach (var item in Model)
+        {
+            <div class="mt-5">
+                <div class="d-style btn btn-brc-tp border-2 bgc-white btn-outline-purple btn-h-outline-purple btn-a-outline-purple w-100 my-2 py-3 shadow-sm">
+                    <div class="row align-items-center">
+                        <div class="col-12 col-md-4">
+                            <h4 class="pt-3 text-170 text-600 text-purple-d1 letter-spacing">
+                                @item.Vehicle
+                            </h4>
+
+                            <div class="text-secondary-d1 text-120">
+                                <span class="ml-n15 align-text-bottom">@item.FirstName @item.LastName</span>
+                            </div>
+
+                            <div class="text-secondary-d1 text-120">
+                                <span class="ml-n15 align-text-bottom">ID: @item.Id</span>
+                            </div>
+
+                        </div>
+
+                        <ul class="list-unstyled mb-0 col-12 col-md-4 text-dark-l1 text-90 text-left my-4 my-md-0">
+                            <li>
+                                <i class="fa fa-check text-success-m2 text-110 mr-2 mt-1"></i>
+                                <span>
+                                    <span class="text-110">
+                                        Start: @item.StartDate.ToShortDateString()
+                                    </span>
+                                </span>
+                            </li>
+
+                            <li class="mt-25">
+                                <i class="fa fa-check text-success-m2 text-110 mr-2 mt-1"></i>
+                                <span class="text-110">
+                                    End: @item.EndDate.ToShortDateString()
+                                </span>
+                            </li>
+
+                            <li class="mt-25">
+                                <i class="fa fa-check text-success-m2 text-110 mr-2 mt-1"></i>
+                                <span class="text-110">
+                                    Entry: @item.EntryDate
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+        @if (pager.TotalPages > 0)
+        {
+            <ul class="pagination justify-content-end">
+
+                @if (pager.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="btn btn-outline-dark" asp-controller="VehicleRental" asp-action="GetUserRentals" asp-route-pg="1">First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="btn btn-outline-dark" asp-controller="VehicleRental" asp-action="GetUserRentals" asp-route-pg="@(pager.CurrentPage-1)">Previous</a>
+                    </li>
+                }
+
+                @for (var pge = pager.StartPage; pge <= pager.EndPage; pge++)
+                {
+                    <li class="page-item">
+                        <a class="btn @(pge == pager.CurrentPage ? "btn-dark" : "btn-outline-dark")" asp-controller="VehicleRental" asp-action="GetUserRentals" asp-route-pg="@pge"> @pge</a>
+                    </li>
+                }
+
+                @if (pager.CurrentPage < pager.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="btn btn-outline-dark" asp-controller="VehicleRental" asp-action="GetUserRentals" asp-route-pg="@(pager.CurrentPage+1)">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="btn btn-outline-dark" asp-controller="VehicleRental" asp-action="GetUserRentals" asp-route-pg="@(pager.TotalPages)">Last</a>
+                    </li>
+                }
+
+            </ul>
+        }
+    </div>
+
+</body>
